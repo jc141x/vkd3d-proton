@@ -572,6 +572,19 @@ static void vkd3d_instance_deduce_config_flags_from_environment(void)
         INFO("VKD3D_SHADER_OVERRIDE is used, pipeline_library_ignore_spirv option is enforced.\n");
         vkd3d_config_flags |= VKD3D_CONFIG_FLAG_PIPELINE_LIBRARY_IGNORE_SPIRV;
     }
+
+    if (getenv("VKD3D_SHADER_CACHE"))
+    {
+        INFO("VKD3D_SHADER_CACHE is used, shader_cache is enforced.\n");
+        vkd3d_config_flags |= VKD3D_CONFIG_FLAG_SHADER_CACHE;
+    }
+
+    /* If we're using a global shader cache, it's meaningless to use PSO caches. */
+    if (vkd3d_config_flags & VKD3D_CONFIG_FLAG_SHADER_CACHE)
+    {
+        INFO("shader_cache is used, global_pipeline_cache is enforced.\n");
+        vkd3d_config_flags |= VKD3D_CONFIG_FLAG_GLOBAL_PIPELINE_CACHE;
+    }
 }
 
 static void vkd3d_instance_apply_global_shader_quirks(void)
@@ -626,6 +639,8 @@ static const struct vkd3d_debug_option vkd3d_config_options[] =
     {"recycle_command_pools", VKD3D_CONFIG_FLAG_RECYCLE_COMMAND_POOLS},
     {"pipeline_library_ignore_mismatch_driver", VKD3D_CONFIG_FLAG_PIPELINE_LIBRARY_IGNORE_MISMATCH_DRIVER},
     {"breadcrumbs", VKD3D_CONFIG_FLAG_BREADCRUMBS},
+    {"shader_cache", VKD3D_CONFIG_FLAG_SHADER_CACHE},
+    {"shader_cache_sync", VKD3D_CONFIG_FLAG_SHADER_CACHE_SYNC},
 };
 
 static void vkd3d_config_flags_init_once(void)
