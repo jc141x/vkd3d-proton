@@ -1478,6 +1478,8 @@ struct d3d12_graphics_pipeline_state
     struct vkd3d_shader_debug_ring_spec_info spec_info[VKD3D_MAX_SHADER_STAGES];
     VkPipelineShaderStageCreateInfo stages[VKD3D_MAX_SHADER_STAGES];
     struct vkd3d_shader_code code[VKD3D_MAX_SHADER_STAGES];
+    VkPipelineShaderStageModuleIdentifierCreateInfoEXT identifiers[VKD3D_MAX_SHADER_STAGES];
+    uint8_t identifier_buffers[VKD3D_MAX_SHADER_STAGES][32];
     size_t stage_count;
 
     struct d3d12_graphics_pipeline_state_cached_desc cached_desc;
@@ -1532,6 +1534,8 @@ struct d3d12_compute_pipeline_state
 {
     VkPipeline vk_pipeline;
     struct vkd3d_shader_code code;
+    VkPipelineShaderStageModuleIdentifierCreateInfoEXT identifier;
+    uint8_t identifier_buffer[32];
 };
 
 /* To be able to load a pipeline from cache, this information must match exactly,
@@ -1737,6 +1741,7 @@ enum vkd3d_pipeline_library_flags
     VKD3D_PIPELINE_LIBRARY_FLAG_STREAM_ARCHIVE = 1 << 4,
     /* We expect to parse archive from thread, so consider thread safety and cancellation points. */
     VKD3D_PIPELINE_LIBRARY_FLAG_STREAM_ARCHIVE_PARSE_ASYNC = 1 << 5,
+    VKD3D_PIPELINE_LIBRARY_FLAG_SHADER_IDENTIFIER = 1 << 6,
 };
 
 HRESULT d3d12_pipeline_library_create(struct d3d12_device *device, const void *blob,
@@ -1750,7 +1755,8 @@ HRESULT vkd3d_create_pipeline_cache_from_d3d12_desc(struct d3d12_device *device,
 HRESULT vkd3d_get_cached_spirv_code_from_d3d12_desc(
         const struct d3d12_cached_pipeline_state *state,
         VkShaderStageFlagBits stage,
-        struct vkd3d_shader_code *spirv_code);
+        struct vkd3d_shader_code *spirv_code,
+        VkPipelineShaderStageModuleIdentifierCreateInfoEXT *identifier);
 VkResult vkd3d_serialize_pipeline_state(struct d3d12_pipeline_library *pipeline_library,
         const struct d3d12_pipeline_state *state, size_t *size, void *data);
 HRESULT d3d12_cached_pipeline_state_validate(struct d3d12_device *device,
