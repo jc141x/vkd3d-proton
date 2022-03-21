@@ -155,6 +155,8 @@ struct vkd3d_vulkan_info
     bool EXT_shader_image_atomic_int64;
     bool EXT_scalar_block_layout;
     bool EXT_pipeline_creation_feedback;
+    bool EXT_pipeline_creation_cache_control;
+    bool EXT_shader_module_identifier;
     /* AMD device extensions */
     bool AMD_buffer_marker;
     bool AMD_device_coherent_memory;
@@ -3025,6 +3027,7 @@ struct vkd3d_physical_device_info
     VkPhysicalDeviceConservativeRasterizationPropertiesEXT conservative_rasterization_properties;
     VkPhysicalDeviceShaderIntegerDotProductPropertiesKHR shader_integer_dot_product_properties;
     VkPhysicalDeviceDriverPropertiesKHR driver_properties;
+    VkPhysicalDeviceShaderModuleIdentifierPropertiesEXT shader_module_identifier_properties;
 
     VkPhysicalDeviceProperties2KHR properties2;
 
@@ -3064,6 +3067,8 @@ struct vkd3d_physical_device_info
     VkPhysicalDeviceDescriptorSetHostMappingFeaturesVALVE descriptor_set_host_mapping_features;
     VkPhysicalDeviceDynamicRenderingFeaturesKHR dynamic_rendering_features;
     VkPhysicalDeviceCoherentMemoryFeaturesAMD device_coherent_memory_features_amd;
+    VkPhysicalDevicePipelineCreationCacheControlFeaturesEXT pipeline_creation_cache_control_features;
+    VkPhysicalDeviceShaderModuleIdentifierFeaturesEXT shader_module_identifier_features;
 
     VkPhysicalDeviceFeatures2 features2;
 

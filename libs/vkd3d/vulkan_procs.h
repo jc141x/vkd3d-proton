@@ -294,6 +294,9 @@ VK_DEVICE_EXT_PFN(vkGetImageViewAddressNVX)
 VK_DEVICE_EXT_PFN(vkGetDescriptorSetLayoutHostMappingInfoVALVE)
 VK_DEVICE_EXT_PFN(vkGetDescriptorSetHostMappingVALVE)
 
+/* VK_EXT_shader_module_identifier */
+VK_DEVICE_EXT_PFN(vkGetShaderModuleIdentifierEXT)
+
 #undef VK_INSTANCE_PFN
 #undef VK_INSTANCE_EXT_PFN
 #undef VK_DEVICE_PFN
