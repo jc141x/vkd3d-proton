@@ -636,16 +636,20 @@ HRESULT vkd3d_get_cached_spirv_code_from_d3d12_desc(
     meta = CONST_CAST_CHUNK_DATA(chunk, shader_meta);
     memcpy(&spirv_code->meta, &meta->meta, sizeof(meta->meta));
 
-    chunk = find_blob_chunk(CONST_CAST_CHUNK_BASE(blob), payload_size,
-            VKD3D_PIPELINE_BLOB_CHUNK_TYPE_SHADER_IDENTIFIER | (stage << VKD3D_PIPELINE_BLOB_CHUNK_INDEX_SHIFT));
-
-    if (chunk)
+    if (state->library && (state->library->flags & VKD3D_PIPELINE_LIBRARY_FLAG_SHADER_IDENTIFIER))
     {
-        identifier->pIdentifier = chunk->data;
-        identifier->identifierSize = chunk->size;
-        spirv_code->size = 0;
-        spirv_code->code = NULL;
-        return S_OK;
+        /* Only return identifier if we can use it. */
+        chunk = find_blob_chunk(CONST_CAST_CHUNK_BASE(blob), payload_size,
+                VKD3D_PIPELINE_BLOB_CHUNK_TYPE_SHADER_IDENTIFIER | (stage << VKD3D_PIPELINE_BLOB_CHUNK_INDEX_SHIFT));
+
+        if (chunk)
+        {
+            identifier->pIdentifier = chunk->data;
+            identifier->identifierSize = chunk->size;
+            spirv_code->size = 0;
+            spirv_code->code = NULL;
+            return S_OK;
+        }
     }
 
     /* Aim to pull SPIR-V either from inlined chunk, or a link. */
